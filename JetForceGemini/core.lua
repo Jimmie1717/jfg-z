@@ -173,14 +173,14 @@ function core.get.heads(character,head_type)
 	local addr=nil;
 	for key,value in pairs(common.values.characters) do
 		if(key==character)then
-			addr=version.character_data+(value*0x76)+common.offsets.character_data.heads.tribal;
+			addr=version.character_data+(value*0x76);
 		end
 	end
 	if(addr==nil)then return nil; end
 	local offset=nil;
 	for key,value in pairs(common.offsets.character_data.heads) do
 		if(key==head_type)then
-			addr=addr+common.offsets.character_data.heads[head_type];
+			offset=common.offsets.character_data.heads[head_type];
 		end
 	end
 	if(offset==nil)then return nil; end
@@ -191,14 +191,14 @@ function core.set.heads(character,head_type,amount)
 	local addr=nil;
 	for key,value in pairs(common.values.characters) do
 		if(key==character)then
-			addr=version.character_data+(value*0x76)+common.offsets.character_data.heads.tribal;
+			addr=version.character_data+(value*0x76);
 		end
 	end
 	if(addr==nil)then return nil; end
 	local offset=nil;
 	for key,value in pairs(common.offsets.character_data.heads) do
 		if(key==head_type)then
-			addr=addr+common.offsets.character_data.heads[head_type];
+			offset=common.offsets.character_data.heads[head_type];
 		end
 	end
 	if(offset==nil)then return nil; end
