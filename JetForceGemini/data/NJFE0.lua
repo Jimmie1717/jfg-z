@@ -2,7 +2,8 @@ local version={
 	settings={
 		widescreen=0x0A51A8
 	},
-	save_context={
+	version_info=0x0A31D0,
+	global_context={
 		continues=0x0A3281,
 		scene={
 			current=0x0A323C,
@@ -13,6 +14,16 @@ local version={
 			setter=0x0A3258,
 		},
 		load=0x0A3294,
+		debug={
+			menu=0x0A32D0,
+			pause=0x0A3328,
+		},
+		rng_seed=0x0A33E4,
+		cheats={
+			rainbow_blood=0x0A5080,
+			jet_force_kids=0x0A5084,
+			ants_as_pants=0x0A5088,
+		}
 	},
 	shipparts=0x1E6044,
 	player={

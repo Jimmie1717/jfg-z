@@ -9,14 +9,14 @@ Bizhawk/
   Lua/
     JetForceGemini.lua
     JetForceGemini/
-		core.lua
-		data/
-			common.lua
-			NJFE0.lua
-			versions.lua
-		utils/
-			hex.lua
-			memory.lua
+      core.lua
+      data/
+        common.lua
+        NJFE0.lua
+        versions.lua
+      utils/
+        hex.lua
+        memory.lua
 ```
 
 Have a ROM loaded then run the `JetForceGemini.lua` script.

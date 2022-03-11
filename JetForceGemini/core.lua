@@ -1,8 +1,10 @@
 local core={};
 core.get={};
+core.get.time={};
 core.get.player={};
 core.get.player.weapon={};
 core.set={};
+core.set.debug={};
 core.set.player={};
 core.set.player.weapon={};
 core.add={};
@@ -38,13 +40,13 @@ function getGameTitle()
 	for i=0,19,1 do rom_title=string.format("%s%s",rom_title,string.char(mem.read.u8(i+0x20,"ROM"))); end
 	return rom_title;
 end
--- Get wether the ROM is supported or not.
+-- Get whether the ROM is supported or not.
 function getGameSupport()
 	local versions=require("JetForceGemini.data.versions");
 	for key,value in pairs(versions) do
-		if(ROM.id==key)then
+		if(key==ROM.id)then
 			ROM.name=versions[key].name;
-			if(ROM.crc[1]==versions[key].crc[1] and ROM.crc[2]==versions[key].crc[2])then
+			if(versions[key].crc[1]==ROM.crc[1] and versions[key].crc[2]==ROM.crc[2])then
 				ROM.crc.match=true;
 			end
 			return versions[key].support;
@@ -52,12 +54,28 @@ function getGameSupport()
 	end
 	return false;
 end
+function getGameHeader()
+	ROM.id=getGameID();
+	ROM.crc=getGameCRCs();
+	ROM.title=getGameTitle();
+end
 
 -- Read a pointer from an address and return it.
 function getPointerAddress(pointer)
 	local pointer=bit.band(mem.read.u32(pointer),0xFFFFFF);
 	if(pointer==0)then return nil; end
 	return pointer;
+end
+
+-- Convert frame counts to a timecode.
+function getTimecode(frames)
+	local miliseconds=((frames%60)/60)*100;
+	local seconds=frames/60;
+	local hours=seconds/3600;
+	local minutes=seconds/60;
+	minutes=minutes%60;
+	seconds=seconds%60;
+	return string.format("%02d:%02d:%02d.%02d",hours,minutes,seconds,miliseconds);
 end
 
 
@@ -562,13 +580,53 @@ function core.add.jetpack()
 	mem.write.u8(version.character_armor,bit.band(mem.read.u8(version.charcter_armor),0x80));
 end
 
+-- Get current file's play time.
+function core.get.time.file()
+	return getTimecode(mem.read.u32(version.timer));
+end
+-- Get current region's play time.
+function core.get.time.region()
+	return getTimecode(mem.read.u32(version.region.timer));
+end
+
+-- Set the Debug Menu state.
+function core.set.debug.menu(state)
+	if(type(state)~="boolean") return; end
+	if(state==true)then
+		mem.write.u32(version.global_context.debug.menu,1);
+	else
+		mem.write.u32(version.global_context.debug.menu,0);
+	end
+end
+-- Set the Debug game state.
+-- Turning this on will "pause" the game.
+function core.set.debug.pause(state)
+	if(type(state)~="boolean") return; end
+	if(state==true)then
+		mem.write.u32(version.global_context.debug.pause,1);
+	else
+		mem.write.u32(version.global_context.debug.pause,0);
+	end
+end
+
+-- Set a cheat to be on or off.
+function core.set.cheat(cheat,state)
+	if(type(cheat)~="string" or type(state)~="string")then return; end;
+	local addr=nil;
+	for key,value in pairs(version.global_context.cheats) do
+		if(key==cheat)then addr=value; end
+	end
+	if(addr==nil)then return; end
+	for key,value in pairs(common.values.settings.cheat) do
+		if(key==state)then mem.write.u8(addr,value); end
+	end
+end
+
 
 
 -- Init
 function core.init()
-	ROM.id=getGameID();
-	ROM.crc=getGameCRCs();
-	ROM.title=getGameTitle();
+	getGameHeader();
 	print(string.format("ROM Header: %s, 0x%08X 0x%08X, %s",ROM.id,ROM.crc[1],ROM.crc[2],ROM.title));
 	gui.addmessage(string.format("ROM Header: %s, 0x%08X 0x%08X, %s",ROM.id,ROM.crc[1],ROM.crc[2],ROM.title));
 	if(getGameSupport())then

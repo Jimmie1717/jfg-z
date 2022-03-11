@@ -20,11 +20,21 @@ local common={
 		}
 	},
 	values={
+		settings={
+			widescreen={
+				off=0,
+				on=1,
+			},
+			cheat={
+				off=0,
+				on=1,
+			},
+		},
 		characters={
-			vela=0x0,
-			juno=0x1,
-			lupus=0x2,
-			floyd=0x3,
+			vela=0,
+			juno=1,
+			lupus=2,
+			floyd=3,
 		},
 		unlocked_characters={
 			vela=0x1,
@@ -125,8 +135,8 @@ local common={
 			all=0xCFF0,
 		},
 		weapon_switch={
-			disable=0x1,
-			enable=0x2,
+			disable=1,
+			enable=2,
 		},
 	},
 	offsets={
