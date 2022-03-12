@@ -1,4 +1,4 @@
-local common={
+return {
 	indexes={
 		weapons={
 			pistol=0,
@@ -17,17 +17,49 @@ local common={
 			flares=13,
 			cluster_bombs=14,
 			splitter=15,
-		}
+		},
 	},
 	values={
+		input={
+			buttons={
+				["c-right"]=0x0001,
+				["c-left"]=0x0002,
+				["c-down"]=0x0004,
+				["c-up"]=0x0008,
+				["r"]=0x0010,
+				["l"]=0x0020,
+				["d-right"]=0x0100,
+				["d-left"]=0x0200,
+				["d-down"]=0x0400,
+				["d-up"]=0x0800,
+				["start"]=0x1000,
+				["z"]=0x2000,
+				["b"]=0x4000,
+				["a"]=0x8000,
+			},
+			joystick={
+				min=0x80,
+				max=0x7F,
+			},
+		},
 		settings={
-			widescreen={
+			generic={
 				off=0,
 				on=1,
 			},
-			cheat={
-				off=0,
-				on=1,
+			speaker={
+				stereo=0,
+				mono=1,
+				headphones=2,
+				surround=3,
+			},
+			volume={
+				min=0x0,
+				max=0x100,
+			},
+			control_mode={
+				normal=0,
+				expert=1,
 			},
 		},
 		characters={
@@ -144,26 +176,26 @@ local common={
 			position={
 				x=0xC,
 				y=0x10,
-				z=0x14
+				z=0x14,
 			},
 			position_2={
 				x=0xF8,
 				y=0xFC,
-				z=0x100
+				z=0x100,
 			},
 			position_3={
 				x=0x5E0,
 				y=0x5E4,
-				z=0x5E8
+				z=0x5E8,
 			},
 			rotation={
 				x=nil,
 				y=0x1D8,
-				z=nil
+				z=nil,
 			},
 			velocity={
 				horizontal=nil,
-				vertical=0x20
+				vertical=0x20,
 			},
 			collision=0x448,
 			jet_fuel=0x648,
@@ -174,13 +206,13 @@ local common={
 					others=0x5FB,
 					pistol=0x5FE,
 				},
-			}
+			},
 		},
 		character_data={
 			gemini_holders=0x2,
 			heads={
 				tribal=0x6,
-				drone=0x8
+				drone=0x8,
 			},
 			mizar_tokens=0x12,
 			weapons={
@@ -194,8 +226,6 @@ local common={
 			levels=0x64,
 			keys=0x66,
 			objects=0x68,
-		}
-	}
+		},
+	},
 };
-
-return common;

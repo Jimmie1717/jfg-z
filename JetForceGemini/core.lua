@@ -110,13 +110,19 @@ end
 function core.get.player.jetfuel()
 	local addr=core.get.player.address();
 	if(addr==nil)then return nil; end
-	return mem.read.u16(addr+common.offsets.player.jet_fuel);
+	return mem.read.u16(addr+common.offsets.player.jet_fuel)/0x24;
 end
 function core.set.player.jetfuel(amount)
 	if(type(amount)~="number")then return; end
 	local addr=core.get.player.address();
 	if(addr==nil)then return nil; end
-	mem.write.u16(addr+common.offsets.player.jet_fuel,amount);
+	if(amount>100)then
+		mem.write.u16(addr+common.offsets.player.jet_fuel,0x0E10);
+	elseif(amount<0)then
+		mem.write.u16(addr+common.offsets.player.jet_fuel,0x0000);
+	else
+		mem.write.u16(addr+common.offsets.player.jet_fuel,amount*0x0024);
+	end
 end
 
 function core.get.player.health()
@@ -577,7 +583,7 @@ end
 
 
 function core.add.jetpack()
-	mem.write.u8(version.character_armor,bit.band(mem.read.u8(version.charcter_armor),0x80));
+	mem.write.u8(version.characters_armor,bit.bor(mem.read.u8(version.characters_armor),0x80));
 end
 
 -- Get current file's play time.
@@ -591,21 +597,17 @@ end
 
 -- Set the Debug Menu state.
 function core.set.debug.menu(state)
-	if(type(state)~="boolean") return; end
-	if(state==true)then
-		mem.write.u32(version.global_context.debug.menu,1);
-	else
-		mem.write.u32(version.global_context.debug.menu,0);
+	if(type(state)~="string")then return; end
+	for key,value in pairs(common.values.settings.generic) do
+		if(key==state)then mem.write.u32(version.global_context.debug.menu,value); end
 	end
 end
 -- Set the Debug game state.
 -- Turning this on will "pause" the game.
 function core.set.debug.pause(state)
-	if(type(state)~="boolean") return; end
-	if(state==true)then
-		mem.write.u32(version.global_context.debug.pause,1);
-	else
-		mem.write.u32(version.global_context.debug.pause,0);
+	if(type(state)~="string")then return; end
+	for key,value in pairs(common.values.settings.generic) do
+		if(key==state)then mem.write.u32(version.global_context.debug.pause,value); end
 	end
 end
 
@@ -617,9 +619,17 @@ function core.set.cheat(cheat,state)
 		if(key==cheat)then addr=value; end
 	end
 	if(addr==nil)then return; end
-	for key,value in pairs(common.values.settings.cheat) do
+	for key,value in pairs(common.values.settings.generic) do
 		if(key==state)then mem.write.u8(addr,value); end
 	end
+end
+
+
+function core.warp(scene,entrance)
+	if(type(scene)~="number" or type(entrance)~="number")then return; end
+	mem.write.u16(version.global_context.scene.setter,scene);
+	mem.write.u16(version.global_context.entrance.setter,entrance);
+	mem.write.u8(version.global_context.load,1);
 end
 
 

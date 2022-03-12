@@ -1,9 +1,27 @@
-local version={
+-- NJFE0 / Jet Force Gemini (USA)
+return {
 	settings={
-		widescreen=0x0A51A8
+		widescreen=0x0FECA8,
+		widescreen_pos=0x0FECAA,
+		volumn={
+			sfx=0x0FF388,
+			music=0x0FF38A,
+		},
+		speaker=0x0FF38C,
+		control_mode={
+			0x0FF38D,
+			0x0FF38E,
+			0x0FF38F,
+			0x0FF390,
+		},
 	},
 	version_info=0x0A31D0,
 	global_context={
+		control_mode={
+			pointer=0x0A18B0,
+			normal=0x0A18B4,
+			expert=0x0A18D8,
+		},
 		continues=0x0A3281,
 		scene={
 			current=0x0A323C,
@@ -23,7 +41,14 @@ local version={
 			rainbow_blood=0x0A5080,
 			jet_force_kids=0x0A5084,
 			ants_as_pants=0x0A5088,
-		}
+		},
+		input={
+			buttons=0x0FB0C0,
+			joystick={
+				x=0x0FB0C2,
+				y=0x0FB0C3,
+			},
+		},
 	},
 	shipparts=0x1E6044,
 	player={
@@ -47,7 +72,7 @@ local version={
 		tribals={
 			saved=0x1E6014,
 			killed=0x1E6015,
-			remaining=0x1E6016
+			remaining=0x1E6016,
 		},
 		weapons={
 			fire_count=0x1E6484,
@@ -56,5 +81,3 @@ local version={
 		},
 	},
 };
-
-return version;
